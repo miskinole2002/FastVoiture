@@ -11,6 +11,7 @@ class Driver(BaseModel):
     phone:str
     license_plate:str
     driver_license:str
+    image:str
 
 #model de donne venant du formulaire connexion
 class Con(BaseModel):
@@ -28,6 +29,7 @@ class Drivers(SQLModel,table=True):
      phone:str
      license_plate:str
      driver_license:str
+     image:str
 
 class Driver_update(BaseModel):
      userName:str
@@ -39,3 +41,6 @@ class Driver_update(BaseModel):
 class Password_update(BaseModel):
       userName:str
       password:str
+
+class Image(BaseModel):
+     image:str

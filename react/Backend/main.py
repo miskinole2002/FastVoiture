@@ -1,19 +1,22 @@
-
+from datetime import datetime
 from fastapi import FastAPI,Depends
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel 
+import base64
 from sqlmodel import SQLModel,create_engine,Session
 from typing import Annotated
-from.securite import password_hash,password_verify
-from.models import Driver,Con,Drivers,Driver_update,Password_update
+from.securite import password_hash,password_verify,decode
+from.models import Driver,Con,Drivers,Driver_update,Password_update,Image
 app=FastAPI()
 app.add_middleware ( CORSMiddleware,
     allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]) #permet la communication avec react 
-
+Image_Path='images'
+current_time=datetime.now()
+print(current_time)
+name=current_time.strftime("%S")
 # connection a la Base de donnees
 url="mssql+pyodbc://(LocalDB)\\MSSQLLocalDB/FastVoiture?driver=ODBC+Driver+17+for+SQL+Server" 
 engine=create_engine(url)
@@ -40,6 +43,7 @@ def user_verify(item,session:SessionDep):
 
 @app.post("/")
 async def Register (user:Driver,session:SessionDep):
+        
         new_user=Drivers(
              userName=user.userName,
              password=password_hash( user.password),
@@ -47,7 +51,9 @@ async def Register (user:Driver,session:SessionDep):
              email=user.email,
              phone=user.phone,
              license_plate=user.license_plate,
-             driver_license=user.driver_license)
+             driver_license=user.driver_license,
+             image=decode(user.image)
+             )
         
         if user_verify(new_user.userName,session):
              response={"message":"nom d'utiliateur deja existant "}
@@ -115,6 +121,30 @@ async def update_password(user:Password_update,session:SessionDep):
           reponse={'message':' persone inexistante '}
 
      return reponse
+
+@app.post('/capture')
+
+async def capture(I:Image):
+     imag=base64.b64decode(I.image.split(",")[1])
+     
+     current_time=datetime.now()
+     
+     name=current_time.strftime("%H-%M-%S")
+     
+
+     image_name = f"{name}.jpg"
+
+
+     
+
+
+     
+     path=f".\images\{image_name}"
+     
+     with open(path,'wb') as f:
+         x= f.write(imag)
+     print(path)
+     return {'reponse':'bien recu'}
          
 if __name__=="__name__":
     
