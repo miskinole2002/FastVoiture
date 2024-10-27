@@ -17,6 +17,7 @@ class Driver(BaseModel):
 class Con(BaseModel):
      userName:str
      password:str
+     image:str
 
 
 # cette classe permet de creer  un modele de table dans la base de donnee

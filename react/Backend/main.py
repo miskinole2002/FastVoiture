@@ -7,6 +7,7 @@ from sqlmodel import SQLModel,create_engine,Session
 from typing import Annotated
 from.securite import password_hash,password_verify,decode
 from.models import Driver,Con,Drivers,Driver_update,Password_update,Image
+from .face_id import extractFeatures_bd,face_detetion
 app=FastAPI()
 app.add_middleware ( CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -72,15 +73,25 @@ async def connexion(user:Con, session:SessionDep):
        users=session.query(Drivers).filter(Drivers.userName==new_user.userName).first()
        
        if users:
-            verify=password_verify(new_user.password,users.password)
+          extra_bd=extractFeatures_bd(users.image)
+          image=decode(user.image)
+          print(image)
+          face_verify=face_detetion(image,extra_bd)
+          
+          verify=password_verify(new_user.password,users.password)
             
-            if verify:
-                return{"message":"bonne connexion"}
-            else:
-                 return{"message":"mot de passe incorrect"}
+          # if verify:
+          #       reponse={"message":"bonne connexion"}
+          if(face_verify):
+                 
+                 reponse={"message":"viage compatible"}
+          else:
+               reponse={"message":"mot de passe incorect ou face non compatible"}
+              
+          return reponse
 
-       else:
-            return{"message":"personne inexistante"}
+       else: 
+            return{"message":'utilisateur inexistant'}
        
 @app.post("/update")
 async def update(user:Driver_update,session:SessionDep):

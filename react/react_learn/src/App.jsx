@@ -1,5 +1,6 @@
 
 import './App.css'
+import Login from './components/Login'
 import User1 from './components/User1'
 
 function App() {
@@ -8,7 +9,8 @@ function App() {
 
   return (
     <>
-    <User1/>
+    {/* <User1/> */}
+    <Login/>
     </>
   )
 }
