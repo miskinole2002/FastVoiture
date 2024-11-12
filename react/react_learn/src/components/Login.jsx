@@ -19,7 +19,7 @@ const Login=()=>{
     const capture = useCallback(async(e) => {
         e.preventDefault()
         const image = webcamRef.current.getScreenshot();
-  
+        alert(" image capture")
        
         setValue("image", image)
     }, [webcamRef]);

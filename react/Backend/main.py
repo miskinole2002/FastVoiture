@@ -1,6 +1,7 @@
 from datetime import datetime
 from fastapi import FastAPI,Depends
 import uvicorn
+from langchain_ollama import OllamaLLM
 from fastapi.middleware.cors import CORSMiddleware
 import base64
 from sqlmodel import SQLModel,create_engine,Session
@@ -75,16 +76,18 @@ async def connexion(user:Con, session:SessionDep):
        if users:
           extra_bd=extractFeatures_bd(users.image)
           image=decode(user.image)
-          print(image)
+          
           face_verify=face_detetion(image,extra_bd)
+          print(face_verify)
           
           verify=password_verify(new_user.password,users.password)
+
             
           # if verify:
           #       reponse={"message":"bonne connexion"}
           if(face_verify):
                  
-                 reponse={"message":"viage compatible"}
+                 reponse={"message":"visage compatible"}
           else:
                reponse={"message":"mot de passe incorect ou face non compatible"}
               
@@ -100,7 +103,7 @@ async def update(user:Driver_update,session:SessionDep):
           user_model=Driver_update(userName=user.userName,
                              nom=user.nom,
                              password=password_hash( user.password),
-                             email=user.email,
+                             email=user.email, 
                              phone=user.phone)
           user_data=user_model.model_dump(exclude_unset=True) 
           exist_user.sqlmodel_update(user_data)

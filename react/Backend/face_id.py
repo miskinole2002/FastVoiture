@@ -17,16 +17,21 @@ def extractFeatures_bd(path):
 #fonction qui extrait les caracteristiques de l'image de la connexion et qui compare avec celle de la bd 
 def face_detetion(path,encode_bd): 
     curImg=cv2.imread(path)
-    matches=[]
+    
     #on convertir l image en bgr
     img=cv2.cvtColor(curImg,cv2.COLOR_BGR2RGB)
     #on detecte la face 
     face_curent=face_recognition.face_locations(img)
+    print(face_curent)
     
+    if face_curent is None:
+        raise ValueError("Aucune face détectée dans l'image.")
 
-    #on encode 
-    face_encode=face_recognition.face_encodings(img,face_curent)[0]
+    else :
+        #on encode 
+        face_encode=face_recognition.face_encodings(img,face_curent)[0]
    #on compare
-    matches=face_recognition.compare_faces([encode_bd],face_encode)
-    
-    return matches
+        match=face_recognition.compare_faces([encode_bd],face_encode)
+        print(match)
+        return match
+     
