@@ -8,9 +8,10 @@ from langchain_ollama.embeddings import OllamaEmbeddings
 from sklearn.metrics.pairwise import cosine_similarity
 from langchain_community.vectorstores import * 
 from langchain_core.runnables import RunnableParallel,RunnablePassthrough
+from pydantic import ValidationError
 
 def Bot(question:str):
-
+        print(f"la question est:{question}")
         model= OllamaLLM(model="llama3.2",temperature=0.0) # temperature=0 ou 1 veut dire qu'il est deterministe
 
 
@@ -82,11 +83,16 @@ def Bot(question:str):
 
         vectostore1= DocArrayInMemorySearch.from_documents( document,embedding=embeddings)
         vectostore2= DocArrayInMemorySearch.from_texts( [
+                
         "pour se connecter dans notre application fast voiture, il faut avoir un vehicule ,un permis de conduire valide  ",
         " si vous avez besoin d'aide contactez le numero suivant +6132777092",
         " pour commencer a gagner de l'argent vous devez  creer un compte",
         "pour recevoir de l'argent vous devriez avoir un compte paypal ",
         " pour tous probleme de payement utiliser le formulaire web ",
+        " je suis Audrey 3.0 j'ai ete creer par 4 supers devellopeurs Blodine,Precieux,Junior,Dr William",
+        "mon but est d'apporter mon aide aux utilisateurs de FastVoiture"
+        "William est un developpeur junior polyvalent  super intelligent,courageux,tres drole ,qui reflechir a 800 idees par seconde ",
+        "william peut parfois manquer de serieux mais c'est ce qui le differencie des autres,il est si aimable" 
 
         ],embedding=embeddings)
 
@@ -107,6 +113,7 @@ def Bot(question:str):
 
 
         chain=setup | prompt | model |parser
-
+        
         x=chain.invoke(question)
+        print(x)
         return x

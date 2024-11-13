@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import  { useContext } from "react"
 import Api from "../contexts/request"
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 
 const Chatbot=()=>{
@@ -15,7 +16,7 @@ const Chatbot=()=>{
         // Ajouter le message utilisateur
         const userMessage = { sender: 'user', text: input };
         setMessages([...messages, userMessage]);
-        console.log(input)
+        
         try {
             // Envoyer le message à l'API FastAPI
             const response = await fetch(`${SOURCE}/chat`, {
@@ -25,24 +26,21 @@ const Chatbot=()=>{
             });
 
             const data = await response.json();
+            console.log('reponse:',data.response)
 
             // Ajouter la réponse de l'API au chat
+            const bot={ text: data.response, sender: 'bot' }
             setMessages((prevMessages) => [
-                ...prevMessages,
-                { text: data.response, sender: 'bot' }
+                ...prevMessages,bot
+                
             ]);
         } catch (error) {
             console.error("Erreur lors de l'envoi du message :", error);
         }
         
-        // Réponse du bot (simulée ici)
-        // const botMessage = {
-        //   sender: 'bot',
-        //   text: "Ceci est une réponse automatique. Je suis là pour aider !",
-        // };
+
   
-        // Ajouter le message du bot après le message de l'utilisateur
-        setMessages([...messages, userMessage]);
+      
         setInput('');
       }
     };
@@ -61,12 +59,20 @@ const Chatbot=()=>{
                       message.sender === 'user' ? 'justify-content-end' : 'justify-content-start'
                     } mb-2`}
                   >
+                    
+                   
                     <div
                       className={`p-2 rounded ${
                         message.sender === 'user' ? 'bg-primary text-white' : 'bg-light text-dark'
                       }`}
                       style={{ maxWidth: '100%' }}
                     >
+                         {message.sender === 'user' && (
+                      <i className="bi bi-person-circle me-2"></i>
+                    )}
+                          {message.sender === 'bot' && (
+                      <i className="bi bi-incognito me-2"></i>
+                    )}
                       {message.text}
                     </div>
                   </div>
