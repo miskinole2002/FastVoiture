@@ -45,3 +45,6 @@ class Password_update(BaseModel):
 
 class Image(BaseModel):
      image:str
+
+class Chat(BaseModel):
+     text:str

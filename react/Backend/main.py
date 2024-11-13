@@ -7,8 +7,9 @@ import base64
 from sqlmodel import SQLModel,create_engine,Session
 from typing import Annotated
 from.securite import password_hash,password_verify,decode
-from.models import Driver,Con,Drivers,Driver_update,Password_update,Image
+from.models import Driver,Con,Drivers,Driver_update,Password_update,Image,Chat
 from .face_id import extractFeatures_bd,face_detetion
+from.app import Bot
 app=FastAPI()
 app.add_middleware ( CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -159,6 +160,13 @@ async def capture(I:Image):
          x= f.write(imag)
      print(path)
      return {'reponse':'bien recu'}
+
+@app.post('/chat')
+async def chat(C:Chat):
+     
+     response_text=Bot(C.text)
+     return{'response':response_text}
+
          
 if __name__=="__name__":
     
