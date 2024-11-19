@@ -16,6 +16,7 @@ const Chatbot=()=>{
         // Ajouter le message utilisateur
         const userMessage = { sender: 'user', text: input };
         setMessages([...messages, userMessage]);
+        setInput('');
         
         try {
             // Envoyer le message à l'API FastAPI
@@ -41,7 +42,6 @@ const Chatbot=()=>{
 
   
       
-        setInput('');
       }
     };
   
@@ -49,7 +49,7 @@ const Chatbot=()=>{
       <Container className="mt-4">
         <Row>
           <Col md={{ span: 100, offset: 3 }}>
-            <h3 className="text-center mb-4">Audrey 3.0.0</h3>
+            <h3 className="text-center mb-4">Audrey 3.0</h3>
             <Card>
               <Card.Body style={{ height: '400px', overflowY: 'scroll' }}>
                 {messages.map((message, index) => (

@@ -43,7 +43,7 @@ def Bot(question:str):
         })
 
         # concatenation 
-        path=r'C:\Users\MCS\OneDrive\Bureau\session6\documentation technique\FastVoiture\react\Backend\test.docx'
+        path=r'C:\Users\MCS\OneDrive\Bureau\session6\documentation technique\FastVoiture\react\Backend\test2.docx'
 
 
         loader= Docx2txtLoader(path)
@@ -84,32 +84,53 @@ def Bot(question:str):
         vectostore1= DocArrayInMemorySearch.from_documents( document,embedding=embeddings)
         vectostore2= DocArrayInMemorySearch.from_texts( [
                 
-        "pour se connecter dans notre application fast voiture, il faut avoir un vehicule ,un permis de conduire valide  ",
+        "pour creer un compte  dans notre application fast voiture, il faut avoir un vehicule ,un permis de conduire valide  ",
         " si vous avez besoin d'aide contactez le numero suivant +6132777092",
         " pour commencer a gagner de l'argent vous devez  creer un compte",
         "pour recevoir de l'argent vous devriez avoir un compte paypal ",
         " pour tous probleme de payement utiliser le formulaire web ",
-        " je suis Audrey 3.0 j'ai ete creer par 4 supers devellopeurs Blodine,Precieux,Junior,Dr William",
+        " je suis Audrey 3.0 j'ai ete creer par 4 supers devellopeurs Blondine,Precieux,Junior,Dr William",
         "mon but est d'apporter mon aide aux utilisateurs de FastVoiture"
         "William est un developpeur junior polyvalent  super intelligent,courageux,tres drole ,qui reflechir a 800 idees par seconde ",
-        "william peut parfois manquer de serieux mais c'est ce qui le differencie des autres,il est si aimable" 
+        "william peut parfois manquer de serieux mais c'est ce qui le differencie des autres,il est si aimable"
+        "Brithney est la futur femme de William , elle est super timide,mais dans le fond elle est une bonne personne quia beaucoup d'qmour a donner " 
 
         ],embedding=embeddings)
 
+        vectostore3= DocArrayInMemorySearch.from_texts( [
+                
+        "pour creer un compte  dans notre application fast voiture, il faut avoir un vehicule ,un permis de conduire valide  ",
+        "pour recevoir des paiements , les conducteurs peuvent enregistrer leurs cartes ou leur compte stripe pour receptionner le paiement"
+        " si vous avez besoin d'aide contactez le numero suivant +6132777092",
+        " pour commencer a gagner de l'argent vous devez  creer un compte avec tous vos informations valide ",
+        "pour recevoir de l'argent vous devriez avoir un compte paypal ",
+        " pour tous problemes de payement utiliser le formulaire web ",
+        " je suis Audrey 3.0 j'ai ete creer par 4 supers devellopeurs Blondine,Precieux,Junior,Dr William",
+        "mon but est d'apporter mon aide aux utilisateurs de FastVoiture"
+        " les conducteurs recoivent 70% du prix de la course "
+        " si un client oublie un objet dans la voiture le conducteur se doit de signaler le poste de controle de l'application via le numero indique"
+        "les  notes des clients sur les chauffeurs est inscrit dans la page activite de l'application"
+        "pour plus de questions Contacter le 6132777092"
+        "en cas d'urgence ou d'agression contactez le 911"
+        " le travail est organise de tel sorte a ce que les chauffeur sont libres de travailler quand ils veulent sans obligation"
+        " la version de Fast 1.0.0 ne marche pour lk'instant qu'au quebec mais prevoit s'etendre "
+        
+
+        ],embedding=embeddings)
         q="comment se connecter a l'application  ?"
-        x=vectostore2.similarity_search_with_score(query=q,k=4)
+        x=vectostore3.similarity_search_with_score(query=q,k=4)
 
 
         # on va  utiliser retriever
 
-        chunks_retriever= vectostore2.as_retriever()
+        chunks_retriever= vectostore3.as_retriever()
         chunks_retriever.invoke(" que dois je faire en cas de probleme ?")
 
 
         ### 
 
         setup=RunnableParallel(context=chunks_retriever,question=RunnablePassthrough())
-        setup.invoke("comment gagner de l'argent ")
+        
 
 
         chain=setup | prompt | model |parser
