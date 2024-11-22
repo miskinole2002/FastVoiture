@@ -84,13 +84,13 @@ async def connexion(user:Con, session:SessionDep):
           verify=password_verify(new_user.password,users.password)
 
             
-          # if verify:
-          #       reponse={"message":"bonne connexion"}
-          if(face_verify):
+          if verify:
+               reponse={"user":users}
+          # if(face_verify):
                  
-                 reponse={"message":"visage compatible"}
-          else:
-               reponse={"message":"mot de passe incorect ou face non compatible"}
+          #        reponse={"message":"visage compatible"}
+          # else:
+          #      reponse={"message":"mot de passe incorect ou face non compatible"}
               
           return reponse
 
